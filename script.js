@@ -3,8 +3,8 @@
 const MOCK_POSTS = [
     {
         id: '1',
-        mediaUrl: 'images/1.pngw=1200&q=80',
-        thumbnailUrl: 'images/1.pngw=600&q=70',
+        mediaUrl: 'images/1.png',
+        thumbnailUrl: 'images/1.png',
         caption: 'Bounding with energy: Pink-backed pelicans showcase their playful nature as they engage in friendly interactions at Kokkarebellur. #wildlife #nature #conservation',
         permalink: 'https://instagram.com/p/example1',
         timestamp: '2026-01-24T10:30:00Z',
