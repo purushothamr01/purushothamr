@@ -3,13 +3,13 @@
 const MOCK_POSTS = [
     {
         id: '1',
-        mediaUrl: 'images/1.png',
-        thumbnailUrl: 'images/1.png',
+        mediaUrl: 'https://drive.google.com/file/d/17aWFyTF8KlaHXj4AgOMWTPUKBKiR3rqG/view?usp=drive_link',
+        thumbnailUrl: 'https://drive.google.com/file/d/17aWFyTF8KlaHXj4AgOMWTPUKBKiR3rqG/view?usp=drive_link',
         caption: 'Bounding with energy: Pink-backed pelicans showcase their playful nature as they engage in friendly interactions at Kokkarebellur. #wildlife #nature #conservation',
-        permalink: 'https://instagram.com/p/example1',
+        permalink: 'https://www.instagram.com/p/C3baU-jPDw2/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==',
         timestamp: '2026-01-24T10:30:00Z',
         category: 'mammals',
-        hashtags: ['wildlife', 'tiger', 'nature', 'conservation'],
+        hashtags: ['wildlife',  'nature', 'conservation'],
         likes: 1247,
     },
     {
