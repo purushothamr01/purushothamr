@@ -1,18 +1,11 @@
-/**
- * Wildlife Photography Portfolio - JavaScript
- * Instagram sync simulation with mock data, filtering, and modal functionality
- */
 
-// ========================================
-// INSTAGRAM MOCK DATA
-// ========================================
 
 const MOCK_POSTS = [
     {
         id: '1',
-        mediaUrl: 'https://images.unsplash.com/photo-1474511320723-9a56873571b7?w=1200&q=80',
-        thumbnailUrl: 'https://images.unsplash.com/photo-1474511320723-9a56873571b7?w=600&q=70',
-        caption: 'Majestic tiger in its natural habitat. The power and grace of this incredible predator never fails to amaze me. #wildlife #tiger #nature #conservation',
+        mediaUrl: 'images/1.pngw=1200&q=80',
+        thumbnailUrl: 'images/1.pngw=600&q=70',
+        caption: 'Bounding with energy: Pink-backed pelicans showcase their playful nature as they engage in friendly interactions at Kokkarebellur. #wildlife #nature #conservation',
         permalink: 'https://instagram.com/p/example1',
         timestamp: '2026-01-24T10:30:00Z',
         category: 'mammals',
