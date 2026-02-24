@@ -485,14 +485,42 @@ const MOCK_POSTS = [
         id: '44',
         mediaUrl: 'images/44.png',
         thumbnailUrl: 'images/44.png',
-        caption: 'Eternal Silhouette - A powerful silhouette of a hilltop structure against a bright, overcast sky. The yellow and red flag adds a splash of color to the otherwise monochromatic high-contrast scene. A moody and artistic perspective. #artistic #silhouette #karnataka #flag #moody #minimal',
+        caption: 'She sits quietly, watching the world pass by…  maybe remembering a time when she too rode through these same streets, with the same kind of silent smiles. 🛺 Delhi moves fast, but some feelings never change',
         permalink: 'https://instagram.com/purushothamr06',
         timestamp: '2025-12-12T16:20:00Z',
-        category: 'landscapes',
-        hashtags: ['artistic', 'silhouette', 'karnataka', 'flag', 'moody', 'minimal'],
+        category: 'street',
+        hashtags: ['street', 'india', 'culture', 'portrait', 'documentary', 'travel'],
         likes: 1980,
     },
+
+{
+        id: '45',
+        mediaUrl: 'images/45.jpg',
+        thumbnailUrl: 'images/45.jpg',
+        caption: 'Balancing life one step at a time. Caught this beautiful moment at MM Hills 🌴✨',
+        permalink: 'https://instagram.com/purushothamr06',
+        timestamp: '2025-12-12T16:20:00Z',
+        category: 'street',
+        hashtags: ['street', 'india', 'culture', 'portrait', 'documentary', 'travel'],
+        likes: 1980,
+    },
+    {
+        id: '46',
+        mediaUrl: 'images/46.png',
+        thumbnailUrl: 'images/46.png',
+        caption: 'one for the camera, one for the memories. india gate nights just feel different.',
+        permalink: 'https://instagram.com/purushothamr06',
+        timestamp: '2025-12-12T16:20:00Z',
+        category: 'street',
+        hashtags: ['street', 'india', 'culture', 'portrait', 'documentary', 'travel'],
+        likes: 1980,
+    },
+
+
+
+    
 ];
+
 
 // ========================================
 // STATE
