@@ -1220,39 +1220,57 @@ function initHeroSlider() {
 const originalCreatePostCard = createPostCard;
 function createPostCard(post, index) {
     const card = document.createElement('article');
-    card.className = 'post-card';
+    card.className = 'portfolio-card';
     card.setAttribute('data-index', index);
+    card.setAttribute('data-category', post.category);
     card.style.opacity = '0';
     card.style.transform = 'translateY(30px)';
 
     card.innerHTML = `
-    <div class="post-card-image-wrapper">
+    <div class="card-image">
       <img 
         src="${post.thumbnailUrl}" 
-        alt="${post.caption.slice(0, 100)}" 
-        class="post-card-image"
+        alt="${post.caption ? post.caption.slice(0, 100) : 'Wildlife detail'}" 
         loading="lazy"
       >
-      <div class="post-card-overlay">
-        <span class="post-card-category">${capitalizeFirst(post.category)}</span>
-        <p class="post-card-caption">${post.caption}</p>
-        <div class="post-card-meta">
-          <span class="post-card-date">${formatRelativeTime(post.timestamp)}</span>
-          <span class="post-card-likes">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-            </svg>
-            ${formatLikes(post.likes)}
-          </span>
+      <div class="card-overlay">
+        <div class="overlay-content">
+            <span class="category-tag">${capitalizeFirst(post.category)}</span>
+            <span class="likes-count">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                ${formatLikes(post.likes)}
+            </span>
         </div>
+      </div>
+    </div>
+    <div class="card-content">
+      <div class="card-header">
+        <a href="${post.permalink}" target="_blank" rel="noopener noreferrer" class="instagram-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069z"/>
+                <circle cx="12" cy="12" r="3.5"/>
+            </svg>
+            View on Instagram
+        </a>
+      </div>
+      <p class="card-caption">${post.caption || ''}</p>
+      <div class="card-footer">
+        <span class="post-date">${formatRelativeTime(post.timestamp)}</span>
       </div>
     </div>
   `;
 
-    card.addEventListener('click', () => openModal(index));
+    // Click on the card opens modal, unless clicking a link
+    card.addEventListener('click', (e) => {
+        if (!e.target.closest('a')) {
+            openModal(index);
+        }
+    });
 
     // Staggered animation
-    const delay = (index % 6) * 100; // Stagger within each batch
+    const delay = (index % 6) * 100;
     setTimeout(() => {
         card.style.transition = 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
         card.style.opacity = '1';
