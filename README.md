@@ -15,19 +15,7 @@ A premium, glassmorphism-inspired portfolio website for wildlife photography to 
 - CSS3 (Vanilla Web Design System, Flexbox, Grid, Transforms, and Backdrop-Filters)
 - JavaScript (Vanilla DOM Manipulation, Event Handling, and Mock Data Fetching)
 
-## Running the Project
 
-To experience the site locally without CORS issues (due to local file fetching), run a simple HTTP server:
-
-```bash
-# Clone the project directory if necessary
-cd purushothamr-main
-
-# Run a Python server
-python3 -m http.server 8000
-```
-
-Once running, navigate to [http://localhost:8000](http://localhost:8000) in your modern browser.
 
 ## File Structure
 - `index.html`: The core semantic markup, layout scaffolding, and SEO meta tags.
