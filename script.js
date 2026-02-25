@@ -3,9 +3,7 @@
  * Instagram sync simulation with mock data, filtering, and modal functionality
  */
 
-// ========================================
-// INSTAGRAM MOCK DATA
-// ========================================
+
 
 const MOCK_POSTS = [
     {
@@ -493,7 +491,7 @@ const MOCK_POSTS = [
         likes: 1980,
     },
 
-{
+    {
         id: '45',
         mediaUrl: 'images/45.jpg',
         thumbnailUrl: 'images/45.jpg',
@@ -518,7 +516,7 @@ const MOCK_POSTS = [
 
 
 
-    
+
 ];
 
 
@@ -566,14 +564,22 @@ function hideLoadingScreen() {
     }
 }
 
-// Scroll Progress Bar
+// Scroll Progress Bar + Navbar scroll glow
 function updateScrollProgress() {
     const scrollProgress = document.getElementById('scrollProgress');
+    const navbar = document.getElementById('navbar');
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPercent = (scrollTop / docHeight) * 100;
     if (scrollProgress) {
-        const scrollTop = window.scrollY;
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const scrollPercent = (scrollTop / docHeight) * 100;
         scrollProgress.style.width = scrollPercent + '%';
+    }
+    if (navbar) {
+        if (scrollTop > 60) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
     }
 }
 
@@ -948,29 +954,38 @@ async function fetchPosts(page = 1, category = 'all') {
 
 function createPostCard(post, index) {
     const card = document.createElement('article');
-    card.className = 'post-card fade-in';
+    card.className = 'portfolio-card fade-in';
     card.setAttribute('data-index', index);
 
     card.innerHTML = `
-    <div class="post-card-image-wrapper">
-      <img 
-        src="${post.thumbnailUrl}" 
-        alt="${post.caption.slice(0, 100)}" 
-        class="post-card-image"
-        loading="lazy"
-      >
-      <div class="post-card-overlay">
-        <span class="post-card-category">${capitalizeFirst(post.category)}</span>
-        <p class="post-card-caption">${post.caption}</p>
-        <div class="post-card-meta">
-          <span class="post-card-date">${formatRelativeTime(post.timestamp)}</span>
-          <span class="post-card-likes">
+    <div class="card-image">
+      <img src="${post.thumbnailUrl}" alt="${post.caption.slice(0, 100)}" loading="lazy">
+      <div class="card-overlay">
+        <div class="overlay-content">
+          <span class="category-tag">${capitalizeFirst(post.category)}</span>
+          <span class="likes-count">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
             </svg>
             ${formatLikes(post.likes)}
           </span>
         </div>
+      </div>
+    </div>
+    <div class="card-content">
+      <div class="card-header">
+        <a href="${post.permalink}" target="_blank" rel="noopener" class="instagram-link">
+          View on Instagram
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+            <polyline points="15 3 21 3 21 9"/>
+            <line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>
+        </a>
+      </div>
+      <p class="card-caption">${post.caption}</p>
+      <div class="card-footer">
+        <span class="post-date">${formatRelativeTime(post.timestamp)}</span>
       </div>
     </div>
   `;
@@ -987,7 +1002,7 @@ async function loadPosts(reset = false) {
         displayedPosts = [];
     }
 
-    loadingIndicator.style.display = 'flex';
+    if (loadingIndicator) loadingIndicator.style.display = 'flex';
     loadMoreBtn.style.display = 'none';
 
     const { posts, hasMore } = await fetchPosts(currentPage, currentCategory);
@@ -998,7 +1013,7 @@ async function loadPosts(reset = false) {
         feedGrid.appendChild(card);
     });
 
-    loadingIndicator.style.display = 'none';
+    if (loadingIndicator) loadingIndicator.style.display = 'none';
 
     if (hasMore) {
         loadMoreBtn.style.display = 'block';
@@ -1015,11 +1030,9 @@ async function loadPosts(reset = false) {
 
 function setActiveFilter(category) {
     filterBtns.forEach(btn => {
-        if (btn.dataset.category === category) {
-            btn.classList.add('active');
-        } else {
-            btn.classList.remove('active');
-        }
+        const isActive = btn.dataset.category === category;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
 }
 
@@ -1197,16 +1210,18 @@ function initHeroSlider() {
     const SLIDE_DURATION = 5000; // 5 seconds per slide
 
     function goToSlide(index) {
-        // Remove active from all slides
+        // Remove active from all slides and indicators
         slides.forEach(slide => slide.classList.remove('active'));
         indicators.forEach(ind => ind.classList.remove('active'));
 
-        // Set new active slide
         currentSlide = index;
         if (currentSlide >= slides.length) currentSlide = 0;
         if (currentSlide < 0) currentSlide = slides.length - 1;
 
         slides[currentSlide].classList.add('active');
+
+        // Force reflow so the CSS ring animation restarts from 0 each time
+        void indicators[currentSlide].offsetWidth;
         indicators[currentSlide].classList.add('active');
     }
 
@@ -1307,3 +1322,216 @@ function createPostCard(post, index) {
 
     return card;
 }
+
+// ========================================
+// MOBILE NAVIGATION MENU — Anti-Gravity
+// ========================================
+
+(function initMobileMenu() {
+    const navToggle = document.getElementById('navToggle');
+    const overlay = document.getElementById('mobileMenuOverlay');
+    const canvas = document.getElementById('menuParticleCanvas');
+    const body = document.body;
+
+    if (!navToggle) return;
+
+    // ── Open / close ──
+    function openMenu() {
+        body.classList.add('menu-open');
+        navToggle.classList.add('open');
+        navToggle.setAttribute('aria-expanded', 'true');
+        if (overlay) {
+            overlay.setAttribute('aria-hidden', 'false');
+        }
+        startParticles();
+    }
+
+    function closeMenu() {
+        body.classList.remove('menu-open');
+        navToggle.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+        if (overlay) {
+            overlay.setAttribute('aria-hidden', 'true');
+        }
+        stopParticles();
+    }
+
+    navToggle.addEventListener('click', () => {
+        body.classList.contains('menu-open') ? closeMenu() : openMenu();
+    });
+
+    if (overlay) {
+        // Close on overlay link click
+        overlay.querySelectorAll('.navbar-link').forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
+
+        // Close on dedicated close button
+        const closeBtn = document.getElementById('menuCloseBtn');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeMenu);
+        }
+
+        // Close on tapping the background (outside content area)
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay || e.target === canvas) {
+                closeMenu();
+            }
+        });
+    }
+
+    // Close on Escape
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && body.classList.contains('menu-open')) closeMenu();
+    });
+
+    // ── Minimal Floating Dust Particles ──
+    let animFrame = null;
+    let particles = [];
+
+    function startParticles() {
+        if (!canvas) return;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const ctx = canvas.getContext('2d');
+        particles = [];
+
+        // Spawn 30 soft dust particles
+        for (let i = 0; i < 30; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: canvas.height + Math.random() * 100,
+                size: Math.random() * 1.6 + 0.3,
+                speed: Math.random() * 0.45 + 0.15,
+                drift: (Math.random() - 0.5) * 0.3,
+                alpha: Math.random() * 0.25 + 0.06,
+                hue: Math.random() > 0.6 ? 38 : 200, // golden or cool-white
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                // Float upward
+                p.y -= p.speed;
+                p.x += p.drift;
+                // Fade out as it nears top
+                const fade = Math.min(1, p.y / (canvas.height * 0.4));
+                ctx.globalAlpha = p.alpha * fade;
+                ctx.fillStyle = p.hue === 38
+                    ? `rgba(201,162,99,${p.alpha * fade})`
+                    : `rgba(220,220,220,${p.alpha * fade})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Reset when it leaves screen top
+                if (p.y < -10) {
+                    p.y = canvas.height + 10;
+                    p.x = Math.random() * canvas.width;
+                }
+            });
+            animFrame = requestAnimationFrame(draw);
+        }
+        draw();
+    }
+
+    function stopParticles() {
+        if (animFrame) {
+            cancelAnimationFrame(animFrame);
+            animFrame = null;
+        }
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    }
+})();
+
+// ========================================
+// TOUCH SWIPE SUPPORT
+// ========================================
+
+(function initTouchSwipe() {
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchEndX = 0;
+    let touchEndY = 0;
+    const SWIPE_THRESHOLD = 50;
+
+    function getSwipeDirection() {
+        const diffX = touchEndX - touchStartX;
+        const diffY = touchEndY - touchStartY;
+
+        // Only register horizontal swipes (more X movement than Y)
+        if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > SWIPE_THRESHOLD) {
+            return diffX > 0 ? 'right' : 'left';
+        }
+        // Vertical swipe detection (for modal close)
+        if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(diffY) > Math.abs(diffX)) {
+            return diffY > 0 ? 'down' : 'up';
+        }
+        return null;
+    }
+
+    // Hero Slider swipe
+    const heroSection = document.getElementById('hero');
+    if (heroSection) {
+        heroSection.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+
+        heroSection.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            const direction = getSwipeDirection();
+
+            if (direction === 'left' || direction === 'right') {
+                const indicators = document.querySelectorAll('.indicator');
+                const activeIndicator = document.querySelector('.indicator.active');
+                if (!activeIndicator) return;
+
+                const currentIndex = Array.from(indicators).indexOf(activeIndicator);
+                let nextIndex;
+
+                if (direction === 'left') {
+                    nextIndex = (currentIndex + 1) % indicators.length;
+                } else {
+                    nextIndex = (currentIndex - 1 + indicators.length) % indicators.length;
+                }
+
+                indicators[nextIndex].click();
+            }
+        }, { passive: true });
+    }
+
+    // Modal swipe navigation
+    const modalEl = document.getElementById('imageModal');
+    if (modalEl) {
+        modalEl.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+
+        modalEl.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            const direction = getSwipeDirection();
+
+            if (direction === 'left') {
+                // Next image
+                const nextBtn = document.getElementById('modalNext');
+                if (nextBtn && nextBtn.style.display !== 'none') nextBtn.click();
+            } else if (direction === 'right') {
+                // Previous image
+                const prevBtn = document.getElementById('modalPrev');
+                if (prevBtn && prevBtn.style.display !== 'none') prevBtn.click();
+            } else if (direction === 'down') {
+                // Close modal on swipe down
+                const closeBtn = document.getElementById('modalClose');
+                if (closeBtn) closeBtn.click();
+            }
+        }, { passive: true });
+    }
+})();
