@@ -3590,7 +3590,7 @@ body.menu-open {
 
     /* Portfolio Grid */
     .feed-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
         gap: var(--spacing-sm);
     }
 
@@ -3608,7 +3608,8 @@ body.menu-open {
 
     .card-overlay {
         opacity: 1;
-        background: linear-gradient(to top, rgba(5, 5, 5, 0.85) 0%, transparent 60%);
+        background: linear-gradient(to top, rgba(5, 5, 5, 0.95) 0%, transparent 70%);
+        padding: var(--spacing-sm);
     }
 
     .overlay-content {
@@ -3683,44 +3684,44 @@ body.menu-open {
     }
 
     /* Contact Section */
-    .contact-wrapper {
-        grid-template-columns: 1fr;
+    .contact-channels {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .contact-channel {
+        padding: 16px;
+        gap: 12px;
+    }
+
+    .channel-platform {
+        font-size: 0.85rem;
+    }
+
+    .channel-handle {
+        font-size: 0.75rem;
+    }
+
+    .bloomeor-panel {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: var(--spacing-xl) var(--spacing-lg);
         gap: var(--spacing-lg);
     }
 
-    .column-title {
-        font-size: 1.1rem;
-    }
-
-    .contact-card {
-        padding: var(--spacing-sm) var(--spacing-md);
-    }
-
-    .contact-icon {
-        width: 40px;
-        height: 40px;
-        min-width: 40px;
-    }
-
-    .contact-handle {
-        font-size: 0.85rem;
-    }
-
-    .company-showcase {
-        padding: var(--spacing-lg);
-        border-radius: 16px;
-    }
-
-    .company-name {
-        font-size: 1.3rem;
-    }
-
-    .company-description {
-        font-size: 0.85rem;
-    }
-
-    .btn-company {
+    .bloomeor-panel-right {
         width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .bloomeor-cta {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .bloomeor-features {
         justify-content: center;
     }
 
@@ -3869,12 +3870,16 @@ body.menu-open {
         font-size: 0.75rem;
     }
 
-    .contact-handle {
+    .contact-channels {
+        grid-template-columns: 1fr;
+    }
+
+    .channel-platform {
         font-size: 0.8rem;
     }
 
-    .contact-label {
-        font-size: 0.6rem;
+    .channel-handle {
+        font-size: 0.7rem;
     }
 
     .company-description {
